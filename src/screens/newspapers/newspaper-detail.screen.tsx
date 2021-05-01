@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
+import { RootStackParamList } from '../../navigation/navigationTypes'
 
 type NewspaperDetailScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -20,11 +21,11 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
 
     useEffect(() => {
         props.navigation.setOptions({
-            title: `Newspaper ${props.route.params.paperId}`,
+            title: `Newspaper ${props.route.params.paper.id}`,
             headerRight: () => (
                 <Button
                     onPress={() => alert('This is a button!')}
-                    title="Info"
+                    title="Edit"
                 />),
             headerRightContainerStyle: { paddingRight: 15 },
             headerBackTitle: 'Home'
@@ -32,7 +33,7 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
     }, [])
     return (
         <View style={styles.container}>
-            <Text>NewspaperDetailScreen {props.route.params.paperId}</Text>
+            <Text>NewspaperDetailScreen {props.route.params.paper.id}</Text>
             <StatusBar style="auto" />
         </View>
     )

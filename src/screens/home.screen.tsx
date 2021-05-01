@@ -8,12 +8,8 @@ const HomeScreen = (props: any) => {
             <Text>HomeScreen</Text>
             <StatusBar style="auto" />
             <Button
-                title="Go to Details 1"
-                onPress={() => props.navigation.navigate('Detail', {paperId: 1})}
-            />
-            <Button
-                title="Go to Details 2"
-                onPress={() => props.navigation.navigate('Detail', {paperId: 2})}
+                title="Go to Newspapers"
+                onPress={() => props.navigation.navigate('Newspaper-List')}
             />
         </View>
     )

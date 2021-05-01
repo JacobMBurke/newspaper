@@ -3,7 +3,9 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import HomeScreen from './src/screens/home.screen'
-import NewsPaperDetailScreen from './src/screens/newspaper-detail.screen'
+import NewsPaperDetailScreen from './src/screens/newspapers/newspaper-detail.screen'
+import NewsPaperListScreen from './src/screens/newspapers/newspaper-list.screen'
+import { RootStackParamList } from './src/navigation/navigationTypes'
 
 const Stack = createStackNavigator<RootStackParamList>()
 
@@ -14,9 +16,18 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: 'Overview' }}
+          options={{ title: 'Home' }}
         />
-        <Stack.Screen name="Detail" component={NewsPaperDetailScreen} />
+        <Stack.Screen 
+        name="Detail" 
+        component={NewsPaperDetailScreen} 
+        options={{title: 'New Newspaper'}}
+        />
+        <Stack.Screen 
+        name="Newspaper-List" 
+        component={NewsPaperListScreen} 
+        options={{title: 'Newspapers'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

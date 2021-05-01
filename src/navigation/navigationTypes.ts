@@ -1,4 +1,7 @@
-type RootStackParamList = {
+import { NewspaperModel } from "../models/NewspaperModel";
+
+export type RootStackParamList = {
     Home: undefined,
-    Detail: { paperId: string }
+    Detail: { paper: NewspaperModel },
+    'Newspaper-List': undefined
 }
