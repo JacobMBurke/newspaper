@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import HomeScreen from './src/screens/home.screen'
 import NewsPaperDetailScreen from './src/screens/newspaper-detail.screen'
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator<RootStackParamList>()
 
 export default function App() {
   return (
