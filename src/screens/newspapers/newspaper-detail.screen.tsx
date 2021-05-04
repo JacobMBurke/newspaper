@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Button, TextInput } from 'react-native'
+import { View, Text, StyleSheet, Button, TextInput, Image } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
+import * as ImagePicker from 'expo-image-picker'
+import { Card } from 'react-native-elements'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
+
 import { RootStackParamList } from '../../navigation/navigationTypes'
 import { NewspaperModel } from '../../models/NewspaperModel'
-import { Card } from 'react-native-elements'
-
 type NewspaperDetailScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
     'Detail'
@@ -53,20 +54,28 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
         })
     }, [paper])
 
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: false,
+          aspect: [4, 3],
+          quality: 1,
+        });
+    
+        console.log(result);
+    
+        if (!result.cancelled) {
+          setPaper({...paper, image: result.uri });
+        }
+      }
     return (
         <View style={styles.container}>
-            <Card
-                containerStyle={
-                    {
-                        alignSelf: 'stretch'
-                    }
-                }>
-                <Card.Title>{paper.title}</Card.Title>
+            <Card>
+                <Card.Title>Title</Card.Title>
                 <Card.Divider />
                 <StatusBar style="auto" />
 
                 <View style={{flexDirection: 'row', alignSelf: 'stretch'}}>
-                    <Text style={{textAlign: 'center', textAlignVertical: 'center', flex: 1}}>Title: </Text>
                     <TextInput
                         value={paper.title}
                         editable={editable}
@@ -78,18 +87,12 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
                 </View>
             </Card>
 
-            <Card
-                containerStyle={
-                    {
-                        alignSelf: 'stretch'
-                    }
-                }>
-                <Card.Title>{paper.description}</Card.Title>
+            <Card>
+                <Card.Title>Description</Card.Title>
                 <Card.Divider />
                 <StatusBar style="auto" />
 
                 <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                    <Text style={{textAlign: 'center', textAlignVertical: 'center', flex: 1}}>Description: </Text>
                     <TextInput
                         value={paper.description}
                         editable={editable}
@@ -99,6 +102,19 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
                         defaultValue={'Insert Newspaper Description here'}
                     />
                 </View>
+            </Card>
+            <Card>
+                <Card.Title>Image</Card.Title>
+                <Card.Divider />
+                <StatusBar style="auto" />
+
+                <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 15}}>
+                   {paper.image && <Image style={{height: 200, width: 200}} source={{ uri: paper.image }}/>}
+                </View>
+                <Button
+                    onPress={pickImage}
+                    title="Add Image"
+                />
             </Card>
         </View>
     )
