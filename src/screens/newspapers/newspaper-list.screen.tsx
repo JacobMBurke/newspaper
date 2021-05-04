@@ -5,6 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
 import { NewspaperModel } from '../../models/NewspaperModel'
 import { RootStackParamList } from '../../navigation/navigationTypes'
+import { Card } from 'react-native-elements'
 
 type NewspaperListScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -26,23 +27,26 @@ const NewspaperListScreen = (props: NewspaperListScreenProps) => {
         })
     }, [])
 
-    const renderNewspaperItem = ({ item }: {item: NewspaperModel}) => {
+    const renderNewspaperItem = ({ item }: { item: NewspaperModel }) => {
         return (
-        <View style={styles.container}>
-            <Button
-                title={item.title}
-                onPress={() => props.navigation.navigate('Detail', { paper: item })}
-            />
-        </View>
+            <View style={styles.container}>
+                <Card>
+                    <Card.Title>{item.title}</Card.Title>
+                    <Card.Divider />
+                    <Text>{item.description}</Text>
+                    <Button
+                        title={'View'}
+                        onPress={() => props.navigation.navigate('Detail', { paper: item })}
+                    />
+                </Card>
+            </View>
         )
     }
 
     return (
         <View style={styles.container}>
-            <Text>NewspaperListScreen</Text>
             <StatusBar style="auto" />
-            <FlatList data={[{id:'5', title: 'The Guardian', description: ' a lefty newspaper'}]} renderItem={ renderNewspaperItem } keyExtractor={item => item.id}/>
-            
+            <FlatList data={[{ id: '5', title: 'The Guardian', description: ' a lefty newspaper' }]} renderItem={renderNewspaperItem} keyExtractor={item => item.id} />
         </View>
     )
 }
@@ -51,7 +55,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'center',
     }
 })
