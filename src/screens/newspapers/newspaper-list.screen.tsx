@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Button, FlatList } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -6,6 +6,8 @@ import { RouteProp } from '@react-navigation/native'
 import { NewspaperModel } from '../../models/NewspaperModel'
 import { RootStackParamList } from '../../navigation/navigationTypes'
 import { Card } from 'react-native-elements'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectNewspapers, upsert } from '../../store/newspapers/reducer'
 
 type NewspaperListScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -20,12 +22,20 @@ interface NewspaperListScreenProps {
 }
 
 const NewspaperListScreen = (props: NewspaperListScreenProps) => {
+    const newspapers = useSelector(selectNewspapers)
+
+    const [papers, setPapers] = useState<NewspaperModel[]>(newspapers)
 
     useEffect(() => {
         props.navigation.setOptions({
             title: `Newspaper List`
         })
     }, [])
+
+    useEffect(() => {
+        setPapers(newspapers)
+    }, [newspapers])
+
 
     const renderNewspaperItem = ({ item }: { item: NewspaperModel }) => {
         return (
@@ -36,8 +46,9 @@ const NewspaperListScreen = (props: NewspaperListScreenProps) => {
                     <Text>{item.description}</Text>
                     <Button
                         title={'View'}
-                        onPress={() => props.navigation.navigate('Detail', { paper: item })}
+                        onPress={() => props.navigation.navigate('Detail', { paperId: item.id })}
                     />
+
                 </Card>
             </View>
         )
@@ -46,7 +57,7 @@ const NewspaperListScreen = (props: NewspaperListScreenProps) => {
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
-            <FlatList data={[{ id: '5', title: 'The Guardian', description: ' a lefty newspaper' }]} renderItem={renderNewspaperItem} keyExtractor={item => item.id} />
+            <FlatList data={papers} renderItem={renderNewspaperItem} keyExtractor={item => item.id} />
         </View>
     )
 }

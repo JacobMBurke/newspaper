@@ -5,9 +5,14 @@ import * as ImagePicker from 'expo-image-picker'
 import { Card } from 'react-native-elements'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
+import 'react-native-get-random-values'
+import { v4 as uuidv4 } from 'uuid'
 
 import { RootStackParamList } from '../../navigation/navigationTypes'
 import { NewspaperModel } from '../../models/NewspaperModel'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectNewspapers, upsert } from '../../store/newspapers/reducer'
+
 type NewspaperDetailScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
     'Detail'
@@ -21,8 +26,16 @@ interface NewspaperDetailScreenProps {
 }
 
 const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
+    const newspapers = useSelector(selectNewspapers)
+    const dispatch = useDispatch()
 
-    const [paper, setPaper] = useState<NewspaperModel>(props.route.params.paper)
+    const [paper, setPaper] = useState<NewspaperModel>({
+        id: uuidv4(),
+        title: '',
+        description: '',
+        createdDate: new Date()
+    })
+
     const [editable, setEditable] = useState<boolean>(false)
 
     useEffect(() => {
@@ -36,9 +49,26 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
             headerRightContainerStyle: { paddingRight: 15 },
             headerBackTitle: 'Home'
         })
+
+        const existingPaper = newspapers.find(el => el.id === props.route.params.paperId)
+
+        if (existingPaper) {
+            setPaper(existingPaper)
+        }
     }, [])
 
     useEffect(() => {
+        if (editable) {
+            props.navigation.setOptions({
+                headerRight: () => (
+                    <Button
+                        onPress={() => dispatch(upsert(paper))}
+                        title="Edit"
+                    />)
+            })
+            setEditable(false)
+            return
+        }
         props.navigation.setOptions({
             headerRight: () => (
                 <Button
@@ -56,18 +86,19 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: false,
-          aspect: [4, 3],
-          quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: false,
+            aspect: [4, 3],
+            quality: 1,
         });
-    
+
         console.log(result);
-    
+
         if (!result.cancelled) {
-          setPaper({...paper, image: result.uri });
+            setPaper({ ...paper, image: result.uri });
         }
-      }
+    }
+
     return (
         <View style={styles.container}>
             <Card>
@@ -75,7 +106,7 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
                 <Card.Divider />
                 <StatusBar style="auto" />
 
-                <View style={{flexDirection: 'row', alignSelf: 'stretch'}}>
+                <View style={{ flexDirection: 'row', alignSelf: 'stretch' }}>
                     <TextInput
                         value={paper.title}
                         editable={editable}
@@ -92,7 +123,7 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
                 <Card.Divider />
                 <StatusBar style="auto" />
 
-                <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                     <TextInput
                         value={paper.description}
                         editable={editable}
@@ -108,8 +139,8 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
                 <Card.Divider />
                 <StatusBar style="auto" />
 
-                <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 15}}>
-                   {paper.image && <Image style={{height: 200, width: 200}} source={{ uri: paper.image }}/>}
+                <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
+                    {paper.image && <Image style={{ height: 200, width: 200 }} source={{ uri: paper.image }} />}
                 </View>
                 <Button
                     onPress={pickImage}
