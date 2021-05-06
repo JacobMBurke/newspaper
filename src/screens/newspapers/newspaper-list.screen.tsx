@@ -28,14 +28,19 @@ const NewspaperListScreen = (props: NewspaperListScreenProps) => {
 
     useEffect(() => {
         props.navigation.setOptions({
-            title: `Newspaper List`
+            title: `Newspapers`,
+            headerRight: () => (
+                <Button
+                    onPress={() => props.navigation.navigate('Detail', { paperId: undefined })}
+                    title="New"
+                />),
+            headerRightContainerStyle: { paddingRight: 15 }
         })
     }, [])
 
     useEffect(() => {
         setPapers(newspapers)
     }, [newspapers])
-
 
     const renderNewspaperItem = ({ item }: { item: NewspaperModel }) => {
         return (

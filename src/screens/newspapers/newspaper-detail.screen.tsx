@@ -54,7 +54,9 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
 
         if (existingPaper) {
             setPaper(existingPaper)
+            return
         }
+        setEditable(true)
     }, [])
 
     useEffect(() => {
@@ -65,7 +67,7 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
                         onPress={() => {
                             console.log(paper)
                             dispatch(upsert(paper))
-                            
+
                             setEditable(false)
                         }}
                         title="Save"
