@@ -3,5 +3,5 @@ export interface NewspaperModel {
     title: string
     description: string
     image?: string
-    createdDate: Date
+    createdDate: number
 }

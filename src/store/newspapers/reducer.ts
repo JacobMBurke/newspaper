@@ -5,7 +5,7 @@ const initialState: NewspaperModel[] = [{
   id: '45',
   title: 'The Guardian',
   description: 'A lefty newspaper',
-  createdDate: new Date()
+  createdDate: (new Date()).getMilliseconds()
 }]
 
 export const newspapersSlice = createSlice({
@@ -13,20 +13,20 @@ export const newspapersSlice = createSlice({
   initialState,
   reducers: {
     upsert: (state, action: PayloadAction<NewspaperModel>) => {
+      const papers = [...state]
       console.log('upserting: ' + JSON.stringify(action.payload))
-      console.log(state)
-      const index = state.findIndex(el => el.id === action.payload.id)
-      if (index) {
-        state.splice(index)
+      const index = papers.findIndex(el => el.id === action.payload.id)
+      if (index !== -1) {
+        papers.splice(index)
       }
 
-      state = [action.payload, ...state]
+      return [action.payload, ...papers]
     }
   }
 })
 
 export const { upsert } = newspapersSlice.actions
 
-export const selectNewspapers = (state: any) => state.newspapers
+export const selectNewspapers = (state: any): NewspaperModel[] => state.newspapers
 
 export default newspapersSlice.reducer

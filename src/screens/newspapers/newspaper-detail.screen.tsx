@@ -33,7 +33,7 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
         id: uuidv4(),
         title: '',
         description: '',
-        createdDate: new Date()
+        createdDate: (new Date()).getMilliseconds()
     })
 
     const [editable, setEditable] = useState<boolean>(false)
@@ -62,11 +62,15 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
             props.navigation.setOptions({
                 headerRight: () => (
                     <Button
-                        onPress={() => dispatch(upsert(paper))}
-                        title="Edit"
+                        onPress={() => {
+                            console.log(paper)
+                            dispatch(upsert(paper))
+                            
+                            setEditable(false)
+                        }}
+                        title="Save"
                     />)
             })
-            setEditable(false)
             return
         }
         props.navigation.setOptions({
@@ -76,7 +80,7 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
                     title="Edit"
                 />)
         })
-    }, [editable])
+    }, [editable, paper])
 
     useEffect(() => {
         props.navigation.setOptions({
