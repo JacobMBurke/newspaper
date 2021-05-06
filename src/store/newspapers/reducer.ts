@@ -27,6 +27,6 @@ export const newspapersSlice = createSlice({
 
 export const { upsert } = newspapersSlice.actions
 
-export const selectNewspapers = (state: any): NewspaperModel[] => state.newspapers
+export const selectNewspapers = (state: any): NewspaperModel[] => state.newspapersReducer
 
 export default newspapersSlice.reducer

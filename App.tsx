@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import HomeScreen from './src/screens/home.screen'
 import NewsPaperDetailScreen from './src/screens/newspapers/newspaper-detail.screen'
 import NewsPaperListScreen from './src/screens/newspapers/newspaper-list.screen'
+
 import { RootStackParamList } from './src/navigation/navigationTypes'
 
 import store from './src/store'

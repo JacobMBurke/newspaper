@@ -50,11 +50,13 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
             headerBackTitle: 'Home'
         })
 
-        const existingPaper = newspapers.find(el => el.id === props.route.params.paperId)
+        if (newspapers) {
+            const existingPaper = newspapers.find(el => el.id === props.route.params.paperId)
 
-        if (existingPaper) {
-            setPaper(existingPaper)
-            return
+            if (existingPaper) {
+                setPaper(existingPaper)
+                return
+            }
         }
         setEditable(true)
     }, [])
