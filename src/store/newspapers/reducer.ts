@@ -14,10 +14,11 @@ export const newspapersSlice = createSlice({
   reducers: {
     upsert: (state, action: PayloadAction<NewspaperModel>) => {
       const papers = [...state]
-      console.log('upserting: ' + JSON.stringify(action.payload))
+      
       const index = papers.findIndex(el => el.id === action.payload.id)
+
       if (index !== -1) {
-        papers.splice(index)
+        papers.splice(index, 1)
       }
 
       return [action.payload, ...papers]
