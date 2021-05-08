@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, StyleSheet, Button, FlatList } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { StackNavigationProp } from '@react-navigation/stack'

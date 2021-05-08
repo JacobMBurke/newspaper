@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Button, TextInput, Image } from 'react-native'
+import { View, StyleSheet, Button, TextInput, Image } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import * as ImagePicker from 'expo-image-picker'
 import { Card } from 'react-native-elements'
@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { RootStackParamList } from '../../navigation/navigationTypes'
 import { NewspaperModel } from '../../models/NewspaperModel'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectNewspapers, selectSingleNewspaper, upsert } from '../../store/newspapers/reducer'
+import { selectSingleNewspaper, upsert } from '../../store/newspapers/reducer'
 
 type NewspaperDetailScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
