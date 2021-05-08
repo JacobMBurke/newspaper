@@ -3,9 +3,11 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, PURGE, REGISTER, REHYDRATE, pers
 import ExpoFileSystemStorage from "redux-persist-expo-filesystem"
 
 import newspapersReducer from './newspapers/reducer'
+import routesReducer from './routes/reducer'
 
 const reducers = combineReducers({
-    newspapersReducer
+    newspapersReducer,
+    routesReducer
 })
 
 const persistConfig = {

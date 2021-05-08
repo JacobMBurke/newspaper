@@ -5,8 +5,11 @@ import { StatusBar } from 'expo-status-bar'
 const HomeScreen = (props: any) => {
     return (
         <View style={styles.container}>
-            <Text>HomeScreen</Text>
             <StatusBar style="auto" />
+            <Button
+                title="Go to Newspapers"
+                onPress={() => props.navigation.navigate('Newspaper-List')}
+            />
             <Button
                 title="Go to Newspapers"
                 onPress={() => props.navigation.navigate('Newspaper-List')}
