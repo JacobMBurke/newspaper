@@ -40,7 +40,10 @@ const NewspaperListScreen = (props: NewspaperListScreenProps) => {
         return (
             <View style={styles.container}>
                 <Card>
-                    <Card.Title>{item.title}</Card.Title>
+                    <View style={styles.cardHeader}>
+                        <Card.Title>{item.title}</Card.Title>
+                        {item.image && <Card.Image style={{width: 100, height: 100}} source={{ uri: item.image }} />}
+                    </View>
                     <Card.Divider />
                     <Text>{item.description}</Text>
                     <Button
@@ -67,6 +70,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'stretch',
         justifyContent: 'center',
+    },
+    cardHeader: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center', 
+        padding: 5
     }
 })
 
