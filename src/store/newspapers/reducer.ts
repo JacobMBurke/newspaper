@@ -5,7 +5,7 @@ const initialState: NewspaperModel[] = [{
   id: '45',
   title: 'The Guardian',
   description: 'A lefty newspaper',
-  createdDate: (new Date()).getMilliseconds()
+  createdDate: (new Date()).getTime()
 }]
 
 export const newspapersSlice = createSlice({
@@ -29,5 +29,7 @@ export const newspapersSlice = createSlice({
 export const { upsert } = newspapersSlice.actions
 
 export const selectNewspapers = (state: any): NewspaperModel[] => state.newspapersReducer
+
+export const selectSingleNewspaper = (state: any, id: string | undefined): NewspaperModel | undefined => (state.newspapersReducer as NewspaperModel[]).find(el => el.id === id)
 
 export default newspapersSlice.reducer

@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { RootStackParamList } from '../../navigation/navigationTypes'
 import { NewspaperModel } from '../../models/NewspaperModel'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectNewspapers, upsert } from '../../store/newspapers/reducer'
+import { selectNewspapers, selectSingleNewspaper, upsert } from '../../store/newspapers/reducer'
 
 type NewspaperDetailScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -26,14 +26,14 @@ interface NewspaperDetailScreenProps {
 }
 
 const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
-    const newspapers = useSelector(selectNewspapers)
+    const newspaper = useSelector((state) => selectSingleNewspaper(state, props.route.params.paperId))
     const dispatch = useDispatch()
 
     const [paper, setPaper] = useState<NewspaperModel>({
         id: uuidv4(),
         title: '',
         description: '',
-        createdDate: (new Date()).getMilliseconds()
+        createdDate: (new Date()).getTime()
     })
 
     const [editable, setEditable] = useState<boolean>(false)
@@ -50,13 +50,9 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
             headerBackTitle: 'Home'
         })
 
-        if (newspapers) {
-            const existingPaper = newspapers.find(el => el.id === props.route.params.paperId)
-
-            if (existingPaper) {
-                setPaper(existingPaper)
-                return
-            }
+        if (newspaper) {
+            setPaper(newspaper)
+            return
         }
         setEditable(true)
     }, [])
@@ -98,12 +94,12 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
             allowsEditing: false,
             aspect: [4, 3],
             quality: 1,
-        });
+        })
 
-        console.log(result);
+        console.log(result)
 
         if (!result.cancelled) {
-            setPaper({ ...paper, image: result.uri });
+            setPaper({ ...paper, image: result.uri })
         }
     }
 
@@ -118,7 +114,7 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
                     <TextInput
                         value={paper.title}
                         editable={editable}
-                        style={{ height: 40, borderWidth: 1, alignSelf: 'center', flex: 3 }}
+                        style={{ padding: 5, height: 40, borderWidth: 1, alignSelf: 'center', flex: 3 }}
                         placeholder='Insert Newspaper Title here'
                         onChangeText={text => setPaper({ ...paper, title: text })}
                         defaultValue={'Insert Newspaper Title here'}
@@ -135,7 +131,7 @@ const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
                     <TextInput
                         value={paper.description}
                         editable={editable}
-                        style={{ height: 40, borderWidth: 1, alignSelf: 'center', flex: 3 }}
+                        style={{ padding: 5, height: 40, borderWidth: 1, alignSelf: 'center', flex: 3 }}
                         placeholder='Insert Newspaper Description here'
                         onChangeText={text => setPaper({ ...paper, description: text })}
                         defaultValue={'Insert Newspaper Description here'}
