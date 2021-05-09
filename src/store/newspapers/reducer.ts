@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from '..'
 import { NewspaperModel } from '../../models/NewspaperModel'
 
 const initialState: NewspaperModel[] = [{
@@ -28,8 +29,8 @@ export const newspapersSlice = createSlice({
 
 export const { upsert } = newspapersSlice.actions
 
-export const selectNewspapers = (state: any): NewspaperModel[] => state.newspapersReducer
+export const selectNewspapers = (state: RootState): NewspaperModel[] => state.newspapersReducer
 
-export const selectSingleNewspaper = (state: any, id: string | undefined): NewspaperModel | undefined => (state.newspapersReducer as NewspaperModel[]).find(el => el.id === id)
+export const selectSingleNewspaper = (state: RootState, id: string | undefined): NewspaperModel | undefined => (state.newspapersReducer as NewspaperModel[]).find(el => el.id === id)
 
 export default newspapersSlice.reducer

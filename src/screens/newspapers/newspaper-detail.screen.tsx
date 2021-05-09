@@ -7,11 +7,12 @@ import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { RootStackParamList } from '../../navigation/navigationTypes'
 import { NewspaperModel } from '../../models/NewspaperModel'
-import { useDispatch, useSelector } from 'react-redux'
 import { selectSingleNewspaper, upsert } from '../../store/newspapers/reducer'
+import { RootState } from '../../store'
 
 type NewspaperDetailScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -26,7 +27,7 @@ interface NewspaperDetailScreenProps {
 }
 
 const NewspaperDetailScreen = (props: NewspaperDetailScreenProps) => {
-    const newspaper = useSelector((state) => selectSingleNewspaper(state, props.route.params.paperId))
+    const newspaper = useSelector((state: RootState) => selectSingleNewspaper(state, props.route.params.paperId))
     const dispatch = useDispatch()
 
     const [paper, setPaper] = useState<NewspaperModel>({
