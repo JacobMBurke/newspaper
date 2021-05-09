@@ -16,10 +16,10 @@ import { RootState } from '../../store'
 
 type NewspaperDetailScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
-    'Detail'
+    'Newspaper-Detail'
 >
 
-type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Detail'>
+type ProfileScreenRouteProp = RouteProp<RootStackParamList, 'Newspaper-Detail'>
 
 interface NewspaperDetailScreenProps {
     navigation: NewspaperDetailScreenNavigationProp

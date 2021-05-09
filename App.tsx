@@ -24,7 +24,7 @@ export default function App() {
             options={{ title: 'Home' }}
           />
           <Stack.Screen
-            name="Detail"
+            name="Newspaper-Detail"
             component={NewsPaperDetailScreen}
             options={{ title: 'New Newspaper' }}
           />

@@ -1,5 +1,7 @@
 export type RootStackParamList = {
     Home: undefined,
-    Detail: { paperId: string | undefined },
-    'Newspaper-List': undefined
+    'Newspaper-Detail': { paperId: string | undefined },
+    'Newspaper-List': undefined,
+    'Route-List': undefined,
+    'Route-Detail': { routeId: string | undefined }
 }

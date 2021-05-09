@@ -29,7 +29,7 @@ const NewspaperListScreen = (props: NewspaperListScreenProps) => {
             title: `Newspapers`,
             headerRight: () => (
                 <Button
-                    onPress={() => props.navigation.navigate('Detail', { paperId: undefined })}
+                    onPress={() => props.navigation.navigate('Newspaper-Detail', { paperId: undefined })}
                     title="New"
                 />),
             headerRightContainerStyle: { paddingRight: 15 }
@@ -48,7 +48,7 @@ const NewspaperListScreen = (props: NewspaperListScreenProps) => {
                     <Text>{item.description}</Text>
                     <Button
                         title={'View'}
-                        onPress={() => props.navigation.navigate('Detail', { paperId: item.id })}
+                        onPress={() => props.navigation.navigate('Newspaper-Detail', { paperId: item.id })}
                     />
 
                 </Card>
