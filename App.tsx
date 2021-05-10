@@ -24,6 +24,7 @@ export default function App() {
             component={HomeScreen}
             options={{ title: 'Home' }}
           />
+
           <Stack.Screen
             name="Newspaper-Detail"
             component={NewsPaperDetailScreen}
@@ -34,6 +35,7 @@ export default function App() {
             component={NewsPaperListScreen}
             options={{ title: 'Newspapers' }}
           />
+
           <Stack.Screen
             name="Route-List"
             component={RoutesListScreen}

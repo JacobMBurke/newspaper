@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from '..'
 import { RouteModel } from '../../models/RouteModel'
 
 const initialState: RouteModel[] = []
@@ -24,5 +25,7 @@ export const routesSlice = createSlice({
 export const { upsert } = routesSlice.actions
 
 export const selectRoutes = (state: any): RouteModel[] => state.routesReducer
+
+export const selectSingleRoute = (state: RootState, id: string | undefined): RouteModel | undefined => state.routesReducer.find(el => el.id === id)
 
 export default routesSlice.reducer
