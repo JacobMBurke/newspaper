@@ -62,6 +62,7 @@ const RouteDetailScreen = (props: RouteDetailScreenProps) => {
 
         if (routeG) {
             setRoute(routeG)
+            setPaperIds(routeG.newspaperIds)
             return
         }
         setEditable(true)
@@ -91,7 +92,7 @@ const RouteDetailScreen = (props: RouteDetailScreenProps) => {
                     title="Edit"
                 />)
         })
-    }, [editable, route])
+    }, [editable, route, paperIds])
 
     useEffect(() => {
         props.navigation.setOptions({
@@ -183,6 +184,7 @@ const RouteDetailScreen = (props: RouteDetailScreenProps) => {
                 <Button
                     onPress={() => { setShowNewspaperModal(true) }}
                     title="Add or Remove Newspapers"
+                    disabled={editable}
                 />
                 <Card.Divider />
                 <View>
