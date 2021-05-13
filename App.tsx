@@ -7,6 +7,7 @@ import HomeScreen from './src/screens/home.screen'
 import NewsPaperDetailScreen from './src/screens/newspapers/newspaper-detail.screen'
 import NewsPaperListScreen from './src/screens/newspapers/newspaper-list.screen'
 import RoutesListScreen from './src/screens/routes/routes-list.screen'
+import RouteDetailScreen from './src/screens/routes/route-detail.screen'
 
 import { RootStackParamList } from './src/navigation/navigationTypes'
 
@@ -39,6 +40,11 @@ export default function App() {
           <Stack.Screen
             name="Route-List"
             component={RoutesListScreen}
+            options={{ title: 'Routes' }}
+          />
+          <Stack.Screen
+            name="Route-Detail"
+            component={RouteDetailScreen}
             options={{ title: 'Routes' }}
           />
         </Stack.Navigator>
