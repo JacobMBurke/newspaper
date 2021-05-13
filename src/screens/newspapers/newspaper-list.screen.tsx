@@ -45,7 +45,7 @@ const NewspaperListScreen = (props: NewspaperListScreenProps) => {
                         {item.image && <Card.Image style={{width: 100, height: 100}} source={{ uri: item.image }} />}
                     </View>
                     <Card.Divider />
-                    <Text>{item.description}</Text>
+                    <Text style={styles.cardText}>{item.description}</Text>
                     <Button
                         title={'View'}
                         onPress={() => props.navigation.navigate('Newspaper-Detail', { paperId: item.id })}
@@ -70,6 +70,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'stretch',
         justifyContent: 'center',
+    },
+    cardText: {
+        paddingBottom: 5
     },
     cardHeader: {
         flex: 1,

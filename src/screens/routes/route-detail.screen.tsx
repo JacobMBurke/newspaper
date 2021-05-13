@@ -1,8 +1,9 @@
+import 'react-native-get-random-values'
+import { v4 as uuidv4 } from 'uuid'
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, Button, TextInput, Image } from 'react-native'
+import { View, StyleSheet, Button, TextInput, FlatList, Text, Modal, TouchableHighlight } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import * as ImagePicker from 'expo-image-picker'
-import { Card } from 'react-native-elements'
+import { Card, CheckBox } from 'react-native-elements'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
 import 'react-native-get-random-values'
@@ -12,10 +13,12 @@ import { RootStackParamList } from '../../navigation/navigationTypes'
 import { RootState } from '../../store'
 import { selectSingleRoute, upsert } from '../../store/routes/reducer'
 import { RouteModel } from '../../models/RouteModel'
+import { selectNewspapers, selectSingleNewspaper } from '../../store/newspapers/reducer'
+import { NewspaperModel } from '../../models/NewspaperModel'
 
 type RouteDetailScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
-    'Newspaper-Detail'
+    'Route-Detail'
 >
 
 type RouteScreenRouteProp = RouteProp<RootStackParamList, 'Route-Detail'>
@@ -26,19 +29,23 @@ interface RouteDetailScreenProps {
 }
 
 const RouteDetailScreen = (props: RouteDetailScreenProps) => {
-    
+
     const routeG = useSelector((state: RootState) => selectSingleRoute(state, props.route.params.routeId))
+    const papers = useSelector(selectNewspapers)
     const dispatch = useDispatch()
 
     const [route, setRoute] = useState<RouteModel>({
         name: '',
-        id: '',
+        id: uuidv4(),
         deliveryUserId: '',
         description: '',
         warnings: [],
         newspaperIds: []
     })
 
+    const [paperIds, setPaperIds] = useState<string[]>(route.newspaperIds)
+
+    const [showNewspaperModal, setShowNewspaperModal] = useState<boolean>(false)
     const [editable, setEditable] = useState<boolean>(false)
 
     useEffect(() => {
@@ -53,8 +60,8 @@ const RouteDetailScreen = (props: RouteDetailScreenProps) => {
             headerBackTitle: 'Home'
         })
 
-        if (route) {
-            setRoute(route)
+        if (routeG) {
+            setRoute(routeG)
             return
         }
         setEditable(true)
@@ -67,7 +74,7 @@ const RouteDetailScreen = (props: RouteDetailScreenProps) => {
                     <Button
                         onPress={() => {
                             console.log(route)
-                            dispatch(upsert(route))
+                            dispatch(upsert({...route, newspaperIds: paperIds}))
 
                             setEditable(false)
                         }}
@@ -76,6 +83,7 @@ const RouteDetailScreen = (props: RouteDetailScreenProps) => {
             })
             return
         }
+
         props.navigation.setOptions({
             headerRight: () => (
                 <Button
@@ -91,33 +99,62 @@ const RouteDetailScreen = (props: RouteDetailScreenProps) => {
         })
     }, [route])
 
-    // const pickImage = async () => {
-    //     let result = await ImagePicker.launchImageLibraryAsync({
-    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //         allowsEditing: false,
-    //         aspect: [4, 3],
-    //         quality: 1,
-    //     })
+    const renderRouteNewspaperItem = ({ item }: { item: string }) => {
+        const newspaper = papers.find(el=> el.id === item)
+        return (
+            <Card containerStyle={{alignItems: 'flex-start', paddingBottom: 0}}>
+                {newspaper ? <Card.Title>{newspaper.title}</Card.Title> : <Card.Title>Could not find paper in local records</Card.Title>}
+            </Card>
+        )
+    }
 
-    //     console.log(result)
-
-    //     if (!result.cancelled) {
-    //         setRoute({ ...route, image: result.uri })
-    //     }
-    // }
+    const renderNewspapersList = ({ item }: { item: NewspaperModel }) => {
+        const found = paperIds.includes(item.id)
+        return (
+            <CheckBox
+                title={item.title}
+                checked={found}
+                onPress={() => {
+                    if (found) {
+                        setPaperIds(paperIds.filter(el => el !== item.id))
+                        return
+                    }
+                    setPaperIds([...paperIds, item.id])
+                }} />
+        )
+    }
 
     return (
         <View style={styles.container}>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showNewspaperModal}
+            >
+                <View style={styles.container}>
+
+                    <FlatList data={papers} renderItem={renderNewspapersList} keyExtractor={item => item.id} />
+                </View>
+
+                <Button
+                    onPress={() => {
+                        setShowNewspaperModal(!showNewspaperModal);
+                    }}
+                    title="Hide Modal"
+                />
+            </Modal>
+
             <Card>
                 <Card.Title>Route Name</Card.Title>
                 <Card.Divider />
                 <StatusBar style="auto" />
 
-                <View style={{ flexDirection: 'row', alignSelf: 'stretch' }}>
+                <View style={styles.inputContainer}>
                     <TextInput
                         value={route.name}
                         editable={editable}
-                        style={{ padding: 5, height: 40, borderWidth: 1, alignSelf: 'center', flex: 3 }}
+                        style={styles.input}
                         placeholder='Insert Route Name here'
                         onChangeText={text => setRoute({ ...route, name: text })}
                         defaultValue={'Insert Route Name here'}
@@ -130,30 +167,28 @@ const RouteDetailScreen = (props: RouteDetailScreenProps) => {
                 <Card.Divider />
                 <StatusBar style="auto" />
 
-                <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <View style={styles.inputContainer}>
                     <TextInput
                         value={route.description}
                         editable={editable}
-                        style={{ padding: 5, height: 40, borderWidth: 1, alignSelf: 'center', flex: 3 }}
+                        style={styles.input}
                         placeholder='Insert route Description here'
                         onChangeText={text => setRoute({ ...route, description: text })}
                         defaultValue={'Insert route Description here'}
                     />
                 </View>
             </Card>
-            {/* <Card>
-                <Card.Title>Image</Card.Title>
-                <Card.Divider />
-                <StatusBar style="auto" />
-
-                <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 15 }}>
-                    {route.image && <Image style={{ height: 200, width: 200 }} source={{ uri: paper.image }} />}
-                </View>
+            <Card>
+                <Card.Title>Newspapers</Card.Title>
                 <Button
-                    onPress={pickImage}
-                    title="Add Image"
+                    onPress={() => { setShowNewspaperModal(true) }}
+                    title="Add or Remove Newspapers"
                 />
-            </Card> */}
+                <Card.Divider />
+                <View>
+                    <FlatList data={paperIds} renderItem={renderRouteNewspaperItem} keyExtractor={item => item} />
+                </View>
+            </Card>
         </View>
     )
 }
@@ -164,6 +199,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'stretch',
         justifyContent: 'flex-start',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    input: {
+        padding: 5,
+        height: 40,
+        borderWidth: 1,
+        alignSelf: 'center',
+        flex: 3
     }
 })
 
