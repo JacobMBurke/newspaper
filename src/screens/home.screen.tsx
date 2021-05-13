@@ -1,8 +1,23 @@
 import React from 'react'
 import { View, StyleSheet, Button } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
+import { RootStackParamList } from '../navigation/navigationTypes'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
 
-const HomeScreen = (props: any) => {
+type HomeScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'Home'
+>
+
+type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>
+
+interface HomeScreenProps {
+    navigation: HomeScreenNavigationProp
+    route: HomeScreenRouteProp
+}
+
+const HomeScreen = (props: HomeScreenProps) => {
     return (
         <View style={styles.container}>
             <StatusBar style="auto" />
@@ -11,7 +26,7 @@ const HomeScreen = (props: any) => {
                 onPress={() => props.navigation.navigate('Newspaper-List')}
             />
             <Button
-                title="Go to Routes"
+                title="Go to Paper Routes"
                 onPress={() => props.navigation.navigate('Route-List')}
             />
         </View>
@@ -23,7 +38,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
     }
 })
 
