@@ -184,7 +184,7 @@ const RouteDetailScreen = (props: RouteDetailScreenProps) => {
                 <Button
                     onPress={() => { setShowNewspaperModal(true) }}
                     title="Add or Remove Newspapers"
-                    disabled={editable}
+                    disabled={!editable}
                 />
                 <Card.Divider />
                 <View>
